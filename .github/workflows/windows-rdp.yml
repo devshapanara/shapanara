@@ -1,7 +1,7 @@
 name: Windows RDP
 
 on:
-  workflow_dispatch:   # supaya bisa dijalankan manual
+  workflow_dispatch:
 
 jobs:
   build:
@@ -11,10 +11,10 @@ jobs:
       run: Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
 
     - name: Extract Ngrok
-      run: Expand-Archive ngrok.zip -DestinationPath .
+      run: Expand-Archive ngrok.zip -DestinationPath $Env:USERPROFILE
 
     - name: Auth Ngrok
-      run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
+      run: $Env:USERPROFILE\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
       env:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
 
@@ -26,4 +26,4 @@ jobs:
         net user runneradmin runneradmin123
 
     - name: Start Ngrok Tunnel
-      run: .\ngrok\ngrok.exe tcp 3389
+      run: $Env:USERPROFILE\ngrok.exe tcp 3389
